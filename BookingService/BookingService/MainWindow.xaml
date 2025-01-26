@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BookingService"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Height="NaN" Margin="1,7,0,0" Width="NaN">
-        <DataGrid Name="MoviesDataGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        Title="MainWindow" Height="450" Width="640">
+    <Grid Height="NaN" Margin="1,7,0,1" Width="NaN">
+        <ListBox Name="listBox1" Width="323" Height="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="36,52,0,0" />
+        <Button Content="Find Time And Date" HorizontalAlignment="Left" Margin="116,143,0,0" VerticalAlignment="Top" Height="24" Width="164"/>
     </Grid>
 </Window>

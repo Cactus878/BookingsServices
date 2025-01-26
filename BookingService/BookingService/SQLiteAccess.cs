@@ -38,22 +38,34 @@ namespace BookingService
             }
         }
 
-        // Method to retrieve data (SELECT) and return as a DataTable
-        public DataTable ExecuteQuery(string query)
+        public List<string> ExecuteQuery(string query, Dictionary<string, object> parameters = null)
         {
-            DataTable dataTable = new DataTable();
+            List<string> list = new List<string>();
+            //DataTable dataTable = new DataTable();
             using (var connection = GetConnection())
             {
                 connection.Open();
-                using (var command = new SQLiteCommand(query, connection))
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
-                    using (var reader = command.ExecuteReader())
+                    // Add parameters to the command if any
+                    if (parameters != null)
                     {
-                        dataTable.Load(reader);
+                        foreach (var param in parameters)
+                        {
+                            command.Parameters.AddWithValue(param.Key, param.Value);
+                        }
+                    }
+
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(reader.GetString(0));
+                        }
                     }
                 }
             }
-            return dataTable;
+            return list;
         }
     }
 }
