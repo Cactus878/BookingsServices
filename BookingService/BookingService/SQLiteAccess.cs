@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SQLite;
+using System.Security.Cryptography;
 
 
 namespace BookingService
@@ -26,13 +27,21 @@ namespace BookingService
         }
 
         // Method to execute a non-query (INSERT, UPDATE, DELETE)
-        public void ExecuteNonQuery(string query)
+        public void ExecuteNonQuery(string query, Dictionary<string, object> parameters = null)
         {
             using (var connection = GetConnection())
             {
                 connection.Open();
-                using (var command = new SQLiteCommand(query, connection))
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
+                    if (parameters != null)
+                    {
+                        foreach (var param in parameters)
+                        {
+                            command.Parameters.AddWithValue(param.Key, param.Value);
+                        }
+                    }
+
                     command.ExecuteNonQuery();
                 }
             }

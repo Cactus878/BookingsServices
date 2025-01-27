@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,12 +29,14 @@ namespace BookingService
         private string MovieName;
         private string TimeAndDate;
 
+        private string UserLoggedInEmail;
+
         public MainWindow()
         {
             InitializeComponent();
             // Initialize the SQLiteHelper with your database file path
             sqliteAccess = new SQLiteAccess(@"C:\Users\yanni\OneDrive\Documents\Projects\BookingsServices\BookingService\BookingsDB.db");
-            LoadMovies();
+            //LoadMovies();
         }
 
         // Method to load movies from the database into the DataGrid
@@ -44,7 +47,7 @@ namespace BookingService
 
             // Bind the data to the DataGrid
             //MoviesDataGrid.ItemsSource = moviesData.DefaultView;
-            listBox1.ItemsSource = moviesData;
+            //listBox1.ItemsSource = moviesData;
         }
 
         private void LoadDateAndTimesForMovie()
@@ -74,6 +77,50 @@ namespace BookingService
 
             // Bind the data to the DataGrid
             //MoviesDataGrid.ItemsSource = moviesData.DefaultView;
+        }
+
+        private void logInButton_Click(object sender, RoutedEventArgs e)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "@Email", emailInputBox.Text },
+                { "@Password", passwordInputBox.Text }
+            };
+
+            string query = "SELECT * FROM Users WHERE Email = @Email AND Password = @Password;";
+            List<string> usersFound = sqliteAccess.ExecuteQuery(query, parameters);
+
+            if (usersFound.Count() > 0)
+            {
+                UserLoggedInEmail = usersFound[0];
+                MessageBox.Show(UserLoggedInEmail);
+            }
+            else
+            {
+                MessageBox.Show("Email or Password is incorrect");
+            }
+        }
+
+        private void signInButton_Click(object sender, RoutedEventArgs e)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "@Email", emailInputBox.Text },
+                { "@Password", passwordInputBox.Text }
+            };
+
+            string query = "SELECT * FROM Users WHERE Email = @Email";
+            List<string> usersFound = sqliteAccess.ExecuteQuery(query, parameters);
+
+            if (usersFound.Count() > 0)
+            {
+                MessageBox.Show("Email is already in use");
+            }
+            else
+            {
+                query = "INSERT INTO Users VALUES (@Email, @Password);";
+                sqliteAccess.ExecuteNonQuery(query, parameters);
+            }
         }
     }
 }
