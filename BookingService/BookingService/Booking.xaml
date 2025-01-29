@@ -1,0 +1,12 @@
+﻿<Window x:Class="BookingService.Booking"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BookingService"
+        mc:Ignorable="d"
+        Title="Booking" Height="450" Width="800">
+    <Grid Margin="0,-1,0,0">
+        <TextBox Name="UserEmail" TextWrapping="Wrap" Text="TextBox" Margin="3,11,497,364" FontSize="18"/>
+    </Grid>
+</Window>
