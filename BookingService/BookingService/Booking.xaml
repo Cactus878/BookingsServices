@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:BookingService"
         mc:Ignorable="d"
         Title="Booking" Height="450" Width="800">
-    <Grid Margin="0,-1,0,0">
-        <TextBox Name="UserEmail" TextWrapping="Wrap" Text="TextBox" Margin="3,11,497,364" FontSize="18"/>
+    <Grid>
+        <Label Name="UserEmail" Content="Label" Margin="1,0,624,357"/>
+        <ListBox Name="MovieOptions" Margin="10,45,597,24" SelectionChanged="MovieChange"/>
+        <ListBox Name="DateAndTimesOptions" Margin="220,45,387,24" SelectionChanged="DateAndTimeChange"/>
+        <ListBox Name="SeatOptions" Margin="435,45,172,24" SelectionChanged="SeatChange"/>
     </Grid>
 </Window>

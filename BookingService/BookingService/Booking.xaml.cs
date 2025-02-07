@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BookingService
 {
@@ -34,19 +35,18 @@ namespace BookingService
 
             sqliteAccess = new SQLiteAccess(@"C:\Users\yanni\OneDrive\Documents\Projects\BookingsServices\BookingService\BookingsDB.db");
 
-            UserEmail.Text = UserLoggedInEmail + "\r\n";
+            UserEmail.Content = UserLoggedInEmail + "\r\n";
+
+            LoadMovies();
         }
 
-
-        // Method to load movies from the database into the DataGrid
         private void LoadMovies()
         {
             string query = "SELECT DISTINCT MovieName FROM Movie;";  // Query to get all movies
             List<string> moviesData = sqliteAccess.ExecuteQuery(query);
 
-            // Bind the data to the DataGrid
-            //MoviesDataGrid.ItemsSource = moviesData.DefaultView;
-            //listBox1.ItemsSource = moviesData;
+            // Bind the data to the 
+            MovieOptions.ItemsSource = moviesData;
         }
 
         private void LoadDateAndTimesForMovie()
@@ -57,10 +57,9 @@ namespace BookingService
             };
 
             string query = "SELECT DISTINCT MovieTime FROM Movie WHERE MovieName = @MovieName;";  // Query to get all movies
-            //DataTable moviesData = sqliteAccess.ExecuteQuery(query, parameters);
+            List<string> dateAndTimeData = sqliteAccess.ExecuteQuery(query, parameters);
 
-            // Bind the data to the DataGrid
-            //MoviesDataGrid.ItemsSource = moviesData.DefaultView;
+            DateAndTimesOptions.ItemsSource = dateAndTimeData;
         }
 
         private void LoadSeatsForMovie()
@@ -68,14 +67,30 @@ namespace BookingService
             var parameters = new Dictionary<string, object>
             {
                 { "@MovieName", MovieName },
-                { "@MovieName", TimeAndDate }
+                { "@TimeAndDate", TimeAndDate }
             };
 
-            string query = "SELECT * FROM Seats WHERE BookingId IS NULL AND BookedMovieName = @MovieName AND BookedTime = @TimeAndDate;"; // Query to get all movies
-            //DataTable moviesData = sqliteAccess.ExecuteQuery(query, parameters);
+            string query = "SELECT * FROM Seats WHERE BookingEmail IS NULL AND BookedMovieName = @MovieName AND BookedTime = @TimeAndDate;"; // Query to get all movies
+            List<string> seatData = sqliteAccess.ExecuteQuery(query, parameters);
 
-            // Bind the data to the DataGrid
-            //MoviesDataGrid.ItemsSource = moviesData.DefaultView;
+            SeatOptions.ItemsSource = seatData;
+        }
+
+        private void MovieChange(object sender, SelectionChangedEventArgs e)
+        {
+            MovieName = MovieOptions.SelectedItem.ToString();
+            LoadDateAndTimesForMovie();
+        }
+
+        private void DateAndTimeChange(object sender, SelectionChangedEventArgs e)
+        {
+            TimeAndDate = DateAndTimesOptions.SelectedItem.ToString();
+            LoadSeatsForMovie();
+        }
+
+        private void SeatChange(object sender, SelectionChangedEventArgs e)
+        {
+            
         }
     }
 }
