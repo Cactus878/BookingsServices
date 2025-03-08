@@ -31,7 +31,6 @@ namespace BookingService
             InitializeComponent();
             // Initialize the SQLiteHelper with your database file path
             sqliteAccess = new SQLiteAccess(@"C:\Users\yanni\OneDrive\Documents\Projects\BookingsServices\BookingService\BookingsDB.db");
-            //LoadMovies();
         }
 
         private void logInButton_Click(object sender, RoutedEventArgs e)

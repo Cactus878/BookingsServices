@@ -42,11 +42,17 @@ namespace BookingService
 
         private void LoadMovies()
         {
-            string query = "SELECT DISTINCT MovieName FROM Movie;";  // Query to get all movies
-            List<string> moviesData = sqliteAccess.ExecuteQuery(query);
+            string query = "SELECT DISTINCT MovieName, MovieImage FROM Movie;";  // Query to get all movies
+            List<Movie> moviesData = sqliteAccess.ExecuteMovieQuery(query);
+
+            //Debug
+            foreach (Movie movie in moviesData)
+            {
+                Console.WriteLine($"Movie Name: {movie.MovieName}, Movie Image: {movie.ImagePath}");
+            }
 
             // Bind the data to the 
-            MovieOptions.ItemsSource = moviesData;
+            MovieListBox.ItemsSource = moviesData;
         }
 
         private void LoadDateAndTimesForMovie()
@@ -72,25 +78,55 @@ namespace BookingService
 
             string query = "SELECT * FROM Seats WHERE BookingEmail IS NULL AND BookedMovieName = @MovieName AND BookedTime = @TimeAndDate;"; // Query to get all movies
             List<string> seatData = sqliteAccess.ExecuteQuery(query, parameters);
-
-            SeatOptions.ItemsSource = seatData;
-        }
-
-        private void MovieChange(object sender, SelectionChangedEventArgs e)
-        {
-            MovieName = MovieOptions.SelectedItem.ToString();
-            LoadDateAndTimesForMovie();
         }
 
         private void DateAndTimeChange(object sender, SelectionChangedEventArgs e)
         {
-            TimeAndDate = DateAndTimesOptions.SelectedItem.ToString();
-            LoadSeatsForMovie();
+
         }
 
-        private void SeatChange(object sender, SelectionChangedEventArgs e)
+        private void SearchForSeats(object sender, RoutedEventArgs e)
         {
-            
+            if (DateAndTimesOptions.SelectedItem != null)
+            {
+                TimeAndDate = DateAndTimesOptions.SelectedItem.ToString();
+                LoadSeatsForMovie();
+            }
+            else
+            {
+                MessageBox.Show("Please select a date and time.");
+            }
+        }
+
+        private void MovieListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (MovieListBox.SelectedItem != null)
+            {
+                // Get the selected movie
+                Movie selectedMovie = (Movie)MovieListBox.SelectedItem;
+
+                MovieName = selectedMovie.MovieName;
+                LoadDateAndTimesForMovie();
+            }
+            else
+            {
+                MessageBox.Show("Please select a movie.");
+            }
+        }
+    }
+
+    public class Movie
+    {
+        public string MovieName { get; set; }
+        public string MovieImage { get; set; }
+
+        // Assuming MovieImage holds the path to the image
+        public string ImagePath => !string.IsNullOrEmpty(MovieImage) ? MovieImage : "default-image.jpg";
+
+        public Movie(string title, string movieImage)
+        {
+            MovieName = title;
+            MovieImage = movieImage;
         }
     }
 }

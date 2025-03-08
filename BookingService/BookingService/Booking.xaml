@@ -6,10 +6,23 @@
         xmlns:local="clr-namespace:BookingService"
         mc:Ignorable="d"
         Title="Booking" Height="450" Width="800">
-    <Grid>
+    <Grid Margin="0,0,1,0">
         <Label Name="UserEmail" Content="Label" Margin="1,0,624,357"/>
-        <ListBox Name="MovieOptions" Margin="10,45,597,24" SelectionChanged="MovieChange"/>
-        <ListBox Name="DateAndTimesOptions" Margin="220,45,387,24" SelectionChanged="DateAndTimeChange"/>
-        <ListBox Name="SeatOptions" Margin="435,45,172,24" SelectionChanged="SeatChange"/>
+        <ListBox Name="DateAndTimesOptions" Margin="10,221,10,122" SelectionChanged="DateAndTimeChange" VerticalContentAlignment="Top"/>
+        <Button Content="Search For Seats" HorizontalAlignment="Left" Margin="10,323,0,0" VerticalAlignment="Top" Height="25" Width="150" Click="SearchForSeats" RenderTransformOrigin="0.496,0.495"/>
+        <ListBox Name="MovieListBox" HorizontalAlignment="Center" Height="184" VerticalAlignment="Top" Width="776"
+         SelectionMode="Single" SelectionChanged="MovieListBox_SelectionChanged" Margin="0,25,0,0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <!-- Image binding to the ImagePath property -->
+                        <Image Source="{Binding ImagePath}" Width="100" Height="100"/>
+
+                        <!-- MovieName binding to TextBlock -->
+                        <TextBlock Text="{Binding MovieName}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>

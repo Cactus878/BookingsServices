@@ -76,5 +76,32 @@ namespace BookingService
             }
             return list;
         }
+
+        public List<Movie> ExecuteMovieQuery(string query)
+        {
+            List<Movie> movies = new List<Movie>();
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Movie movie = new Movie(
+                                reader.GetString(0), 
+                                reader.GetString(1) // Handle null values
+                            );
+
+                            movies.Add(movie);
+                        }
+                    }
+                }
+            }
+
+            return movies;
+        }
     }
 }
