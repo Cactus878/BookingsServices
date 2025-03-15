@@ -23,7 +23,8 @@ namespace BookingService
         private SQLiteAccess sqliteAccess;
 
         private string MovieName;
-        private string TimeAndDate;
+        private string DateAndTime;
+        private string Seat;
 
         private string UserLoggedInEmail;
 
@@ -40,21 +41,35 @@ namespace BookingService
             LoadMovies();
         }
 
+        //Movie Selection
         private void LoadMovies()
         {
-            string query = "SELECT DISTINCT MovieName, MovieImage FROM Movie;";  // Query to get all movies
+            string query = "SELECT DISTINCT MovieName, MovieImage FROM Movie;";
             List<Movie> moviesData = sqliteAccess.ExecuteMovieQuery(query);
 
-            //Debug
+            /*Debug
             foreach (Movie movie in moviesData)
             {
                 Console.WriteLine($"Movie Name: {movie.MovieName}, Movie Image: {movie.ImagePath}");
-            }
-
-            // Bind the data to the 
-            MovieListBox.ItemsSource = moviesData;
+            }*/
+            MovieOptions.ItemsSource = moviesData;
         }
 
+        private void MovieListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (MovieOptions.SelectedItem != null)
+            {
+                // Get the selected movie
+                Movie selectedMovie = (Movie)MovieOptions.SelectedItem;
+
+                MovieName = selectedMovie.MovieName;
+                SeatOptions.ItemsSource = null;
+                DateAndTimesOptions.ItemsSource = null;
+                LoadDateAndTimesForMovie();
+            }
+        }
+
+        //Date And Time Selection
         private void LoadDateAndTimesForMovie()
         {
             var parameters = new Dictionary<string, object>
@@ -68,49 +83,68 @@ namespace BookingService
             DateAndTimesOptions.ItemsSource = dateAndTimeData;
         }
 
+        private void DateAndTimeChange(object sender, SelectionChangedEventArgs e)
+        {
+            if (DateAndTimesOptions.SelectedItem != null)
+            {
+                DateAndTime = DateAndTimesOptions.SelectedItem.ToString();
+                SeatOptions.ItemsSource = null;
+                LoadSeatsForMovie();
+            }
+        }
+
+        //Seat Selection
         private void LoadSeatsForMovie()
         {
             var parameters = new Dictionary<string, object>
             {
                 { "@MovieName", MovieName },
-                { "@TimeAndDate", TimeAndDate }
+                { "@TimeAndDate", DateAndTime }
             };
 
             string query = "SELECT * FROM Seats WHERE BookingEmail IS NULL AND BookedMovieName = @MovieName AND BookedTime = @TimeAndDate;"; // Query to get all movies
             List<string> seatData = sqliteAccess.ExecuteQuery(query, parameters);
+
+            SeatOptions.ItemsSource = seatData;
         }
 
-        private void DateAndTimeChange(object sender, SelectionChangedEventArgs e)
+        private void SeatChange(object sender, SelectionChangedEventArgs e)
         {
-
-        }
-
-        private void SearchForSeats(object sender, RoutedEventArgs e)
-        {
-            if (DateAndTimesOptions.SelectedItem != null)
+            if(SeatOptions.SelectedItem != null)
             {
-                TimeAndDate = DateAndTimesOptions.SelectedItem.ToString();
-                LoadSeatsForMovie();
+                Seat = SeatOptions.SelectedItem.ToString();
+            }
+        }
+
+        private void Confirm(object sender, RoutedEventArgs e)
+        {
+            if (SeatOptions.SelectedItem != null && MovieOptions != null && DateAndTimesOptions != null)
+            {
+                var parameters = new Dictionary<string, object>
+                {
+                    { "@Email", UserLoggedInEmail },
+                    { "@Seat", Seat },
+                    { "@MovieName", MovieName },
+                    { "@TimeAndDate", DateAndTime }
+                };
+
+
+                MessageBox.Show("Email: " + UserLoggedInEmail + " Movie: " + MovieName + ", Date and Time: " + DateAndTime + ", Seat: " + Seat);
+
+                string query = "UPDATE Seats SET BookingEmail = @Email WHERE SeatNumber = @Seat AND BookedMovieName = @MovieName AND BookedTime = @TimeAndDate;";
+                sqliteAccess.ExecuteNonQuery(query, parameters);
+
+                SeatOptions.SelectedItem = null;
+                Seat = null;
+
+                DateAndTimesOptions.SelectedItem = null;
+                DateAndTime = null;
+
+                MovieName = null;
             }
             else
             {
-                MessageBox.Show("Please select a date and time.");
-            }
-        }
-
-        private void MovieListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (MovieListBox.SelectedItem != null)
-            {
-                // Get the selected movie
-                Movie selectedMovie = (Movie)MovieListBox.SelectedItem;
-
-                MovieName = selectedMovie.MovieName;
-                LoadDateAndTimesForMovie();
-            }
-            else
-            {
-                MessageBox.Show("Please select a movie.");
+                MessageBox.Show("Please select all options");
             }
         }
     }
@@ -121,7 +155,7 @@ namespace BookingService
         public string MovieImage { get; set; }
 
         // Assuming MovieImage holds the path to the image
-        public string ImagePath => !string.IsNullOrEmpty(MovieImage) ? MovieImage : "default-image.jpg";
+        public string ImagePath => !string.IsNullOrEmpty(MovieImage) ? MovieImage : "Images/default-image.jpg";
 
         public Movie(string title, string movieImage)
         {

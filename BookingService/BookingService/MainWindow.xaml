@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BookingService"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="400">
+        Title="Log In" Height="400" Width="400">
     <Grid Height="NaN" Margin="1,7,0,1" Width="NaN">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

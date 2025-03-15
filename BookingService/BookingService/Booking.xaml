@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BookingService"
         mc:Ignorable="d"
-        Title="Booking" Height="450" Width="800">
-    <Grid Margin="0,0,1,0">
+        Title="Booking" Height="475" Width="800">
+    <Grid Margin="0,0,0,0">
         <Label Name="UserEmail" Content="Label" Margin="1,0,624,357"/>
-        <ListBox Name="DateAndTimesOptions" Margin="10,221,10,122" SelectionChanged="DateAndTimeChange" VerticalContentAlignment="Top"/>
-        <Button Content="Search For Seats" HorizontalAlignment="Left" Margin="10,323,0,0" VerticalAlignment="Top" Height="25" Width="150" Click="SearchForSeats" RenderTransformOrigin="0.496,0.495"/>
-        <ListBox Name="MovieListBox" HorizontalAlignment="Center" Height="184" VerticalAlignment="Top" Width="776"
-         SelectionMode="Single" SelectionChanged="MovieListBox_SelectionChanged" Margin="0,25,0,0">
+        <ListBox Name="DateAndTimesOptions" Margin="10,293,525,16" SelectionChanged="DateAndTimeChange" VerticalContentAlignment="Top"/>
+        <ListBox Name="SeatOptions" Margin="301,15,20,48" SelectionChanged="SeatChange" VerticalContentAlignment="Top"/>
+        <Button Content="Confirm" HorizontalAlignment="Left" Margin="295,400,0,0" VerticalAlignment="Top" Height="25" Width="474" Click="Confirm" RenderTransformOrigin="0.496,0.495"/>
+        <ListBox Name="MovieOptions" HorizontalAlignment="Left" Height="260" VerticalAlignment="Top" Width="251"
+         SelectionMode="Single" SelectionChanged="MovieListBox_SelectionChanged" Margin="10,25,0,0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -24,5 +25,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <CheckBox Content="CheckBox" HorizontalAlignment="Left" Margin="1128,214,0,0" VerticalAlignment="Top"/>
+        <Label Content="Label" HorizontalAlignment="Left" Margin="1295,299,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
