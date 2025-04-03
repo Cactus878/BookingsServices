@@ -25,3 +25,5 @@ C:\Users\yanni\OneDrive\Documents\Projects\BookingsServices\BookingService\Booki
 C:\Users\yanni\OneDrive\Documents\Projects\BookingsServices\BookingService\BookingService\obj\Debug\MainWindow.baml
 C:\Users\yanni\OneDrive\Documents\Projects\BookingsServices\BookingService\BookingService\obj\Debug\Booking.g.cs
 C:\Users\yanni\OneDrive\Documents\Projects\BookingsServices\BookingService\BookingService\obj\Debug\Booking.baml
+C:\Users\yanni\OneDrive\Documents\Projects\BookingsServices\BookingService\BookingService\obj\Debug\Menu.g.cs
+C:\Users\yanni\OneDrive\Documents\Projects\BookingsServices\BookingService\BookingService\obj\Debug\Menu.baml

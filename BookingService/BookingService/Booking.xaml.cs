@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -116,6 +118,7 @@ namespace BookingService
             }
         }
 
+        //Confirm Booking
         private void Confirm(object sender, RoutedEventArgs e)
         {
             if (SeatOptions.SelectedItem != null && MovieOptions != null && DateAndTimesOptions != null)
@@ -127,7 +130,6 @@ namespace BookingService
                     { "@MovieName", MovieName },
                     { "@TimeAndDate", DateAndTime }
                 };
-
 
                 MessageBox.Show("Email: " + UserLoggedInEmail + " Movie: " + MovieName + ", Date and Time: " + DateAndTime + ", Seat: " + Seat);
 

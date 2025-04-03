@@ -47,8 +47,8 @@ namespace BookingService
             if (usersFound.Count() > 0)
             {
                 string UserLoggedInEmail = usersFound[0];
-                Booking booking = new Booking(UserLoggedInEmail);
-                booking.ShowDialog();
+                Menu menu = new Menu(UserLoggedInEmail);
+                menu.ShowDialog();
             }
             else
             {
